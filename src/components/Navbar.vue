@@ -1,43 +1,12 @@
 <template>
-  <div class="header">
-    <nav class="navbar navbar-light bg-light navbar-expand-lg">
-      <div class="container">
-        <router-link class="navbar-brand" to="/">Product Manager</router-link>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">
-                Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </div>
+    <el-header>
+      <h1>Customers List</h1>
+    </el-header>
 </template>
 
 <script>
 export default {
-  name: "Products",
+  name: 'Navbar',
   data() {
     return {};
   }

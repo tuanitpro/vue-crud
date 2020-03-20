@@ -40,6 +40,9 @@
     <v-content>
      <router-view></router-view>
     </v-content>
+    <v-footer>
+      <a href="https://tuanitpro.com">https://tuanitpro.com</a>
+    </v-footer>
   </v-app>
 </template>
 

@@ -29,20 +29,23 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                   <v-col cols="12" sm="12" md="6">
+                    <v-text-field v-model="editedItem.code" label="Code"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                  <v-col cols="12" sm="12" md="6">
+                    <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field v-model="editedItem.first_name" label="First Name"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field v-model="editedItem.last_name" label="Last Name"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field v-model="editedItem.phone" label="Phone"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -50,8 +53,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <el-button type="danger" @click="close">Cancel</el-button>
+              <el-button  type="primary" @click="save">OK</el-button>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -67,7 +70,7 @@
               <v-text-field
                 v-model="search"
                 append-icon="search"
-                label="Search name"
+                label="Search here"
                 single-line
                 hide-details
               ></v-text-field>
@@ -90,10 +93,27 @@
         <template v-slot:item.actions="{ item }">
             <v-icon
                 small
-                class="mr-2"
                 @click="editItem(item)"
             >
                 mdi-pencil
+            </v-icon>
+             <v-icon
+                small
+                @click="cloneItem(item)"
+            >
+                mdi-content-copy
+            </v-icon>
+             <v-icon
+                small
+                @click="archivedItem(item)"
+            >
+                mdi-archive-arrow-down
+            </v-icon>
+             <v-icon
+                small
+                @click="archivedItem(item)"
+            >
+                mdi-publish
             </v-icon>
             <v-icon
                 small
@@ -101,12 +121,6 @@
             >
                 mdi-delete
             </v-icon>
-             <v-icon small @click="cloneItem(item)">file_copy</v-icon>
-              <v-icon small @click="publishItem(item)">open_in_new</v-icon>
-              <v-icon small @click="archivedItem(item)">archive</v-icon>
-              <span title="delete">
-                <v-icon small @click="deleteItem(item)">delete</v-icon>
-              </span>
           </template>
           <template v-slot:no-data>
             <v-card-text>
@@ -167,43 +181,52 @@ export default {
       },
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        code: '',
+        username: '',
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: ''
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        code: '',
+        username: '',
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: ''
       },
       selectedEventType: '',
       isShowCriteriaByOther: false,
       isShowByArchived: false,
       headers: [
-        { text: 'Name', align: 'left', sortable: true, value: 'name' },
-        { text: 'Created', align: 'center', value: 'created' },
-        { text: 'Modified', align: 'center', value: 'modified' },
-        { text: 'Owner', align: 'left', value: 'owner' },
+
+        { text: 'Code', align: 'left', value: 'code' },
+        { text: 'Username', align: 'left', value: 'username' },
+        { text: 'First Name', align: 'left', sortable: true, value: 'first_name' },
+        { text: 'Last Name', align: 'left', sortable: true, value: 'last_name' },
+        { text: 'Email', align: 'left', value: 'email' },
+        { text: 'Phone', align: 'left', value: 'phone' },
+        { text: 'Date', align: 'left', value: 'modified' },
         { text: 'Actions', align: 'right', value: 'actions', sortable: false }
       ]
     };
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? 'New Customer' : 'Edit Customer'
     },
     dataSource() {
       const data = this.customerDataSource()
       return data.map((item, key) => {
         return {
-          name: item.name.first,
-          created: this.formatDate(item.registered.date),
-          modified: this.formatDate(item.registered.date),
-          owner: item.name.last
+          code: item.cell,
+          username: item.login.username,
+          first_name: item.name.first,
+          last_name: item.name.last,
+          email: item.email,
+          phone: item.phone,
+          modified: this.formatDate(item.registered.date)
         }
       }
       )
@@ -250,7 +273,7 @@ export default {
       }, 300)
     },
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      this.editedIndex = this.dataSource.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
@@ -259,28 +282,28 @@ export default {
       this.editedIndex = this.dataSource.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want copy item <b>[' + item.name + ']?</b>';
+        'Are you sure you want copy item <b>[' + item.first_name + ']?</b>';
       this.confirmDialog = true;
     },
     deleteItem(item) {
       this.selectedEventType = this.eventType.DELETE;
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want delete item <b>[' + item.name + ']?</b>';
+        'Are you sure you want delete item <b>[' + item.first_name + ']?</b>';
       this.confirmDialog = true;
     },
     archivedItem(item) {
       this.selectedEventType = this.eventType.ARCHIVED;
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want archive item <b>[' + item.name + ']?</b>';
+        'Are you sure you want archive item <b>[' + item.first_name + ']?</b>';
       this.confirmDialog = true;
     },
     publishItem(item) {
       this.selectedEventType = this.eventType.PUBLISH;
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want publish item <b>[' + item.name + ']?</b>';
+        'Are you sure you want publish item <b>[' + item.first_name + ']?</b>';
       this.confirmDialog = true;
     },
     onChangeShowByArchived(event) {

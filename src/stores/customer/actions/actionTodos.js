@@ -2,6 +2,12 @@ import {
   GET_LIST_CUSTOMER,
   GET_LIST_CUSTOMER_SUCCESS,
   GET_LIST_CUSTOMER_FAILED,
+  CREATE_CUSTOMER,
+  CREATE_CUSTOMER_SUCCESS,
+  CREATE_CUSTOMER_FAILED,
+  UPDATE_CUSTOMER,
+  UPDATE_CUSTOMER_SUCCESS,
+  UPDATE_CUSTOMER_FAILED,
   COPY_CUSTOMER,
   COPY_CUSTOMER_SUCCESS,
   COPY_CUSTOMER_FAILED,
@@ -17,21 +23,24 @@ import {
 } from './actionTypes';
 import {
   getList,
+  create,
   copy,
   publish,
   archive,
-  _delete
+  _delete,
+  update
 } from '../../../services/customerService';
 
 export const actions = {
   GET_LIST_CUSTOMER: (context, payload) => {
     context.commit(GET_LIST_CUSTOMER, payload);
     getList(payload).then(response => {
-      context.commit(GET_LIST_CUSTOMER_SUCCESS, response.results);
+      context.commit(GET_LIST_CUSTOMER_SUCCESS, response);
     }).catch(err => {
       context.commit(GET_LIST_CUSTOMER_FAILED, err);
     })
   },
+
   COPY_CUSTOMER: (context, payload) => {
     context.commit(COPY_CUSTOMER, payload);
     copy(payload).then(response => {
@@ -40,6 +49,25 @@ export const actions = {
       context.commit(COPY_CUSTOMER_FAILED, err);
     })
   },
+
+  CREATE_CUSTOMER: (context, payload) => {
+    context.commit(CREATE_CUSTOMER, payload);
+    create(payload).then(response => {
+      context.commit(CREATE_CUSTOMER_SUCCESS, response);
+    }).catch(err => {
+      context.commit(CREATE_CUSTOMER_FAILED, err);
+    })
+  },
+
+  UPDATE_CUSTOMER: (context, payload) => {
+    context.commit(UPDATE_CUSTOMER, payload);
+    update(payload).then(response => {
+      context.commit(UPDATE_CUSTOMER_SUCCESS, response);
+    }).catch(err => {
+      context.commit(UPDATE_CUSTOMER_FAILED, err);
+    })
+  },
+
   PUBLISH_CUSTOMER: (context, payload) => {
     context.commit(PUBLISH_CUSTOMER, payload);
     publish(payload).then(response => {
@@ -48,6 +76,7 @@ export const actions = {
       context.commit(PUBLISH_CUSTOMER_FAILED, err);
     })
   },
+
   ARCHIVE_CUSTOMER: (context, payload) => {
     context.commit(ARCHIVE_CUSTOMER, payload);
     archive(payload).then(response => {
@@ -56,6 +85,7 @@ export const actions = {
       context.commit(ARCHIVE_CUSTOMER_FAILED, err);
     })
   },
+
   DELETE_CUSTOMER: (context, payload) => {
     context.commit(DELETE_CUSTOMER, payload);
     _delete(payload).then(response => {

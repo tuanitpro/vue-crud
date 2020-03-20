@@ -1,30 +1,38 @@
 import { API } from './api';
 
 function getList(params) {
-  params.url = 'https://randomuser.me/api/?results=50'
+  params.url = '/customer'
   return API.get(params);
+}
+function create(params) {
+  params.url = '/customer'
+  return API.post(params);
+}
+function update(params) {
+  params.url = '/customer'
+  return API.put(params);
 }
 function copy(params) {
-  params.url = 'https://randomuser.me/api/?inc=name,registered&nat=US&results=50'
-  return new Promise((resolve, reject) => {
-    resolve({ ok: 1 })
-  })
+  params.url = '/customer'
+  return API.put(params);
 }
 function publish(params) {
-  params.url = 'https://randomuser.me/api/?inc=name,registered&nat=US&results=50'
-  return API.get(params);
+  params.url = '/customer'
+  return API.put(params);
 }
 function archive(params) {
-  params.url = 'https://randomuser.me/api/?inc=name,registered&nat=US&results=50'
-  return API.get(params);
+  params.url = '/customer'
+  return API.put(params);
 }
 function _delete(params) {
-  params.url = 'https://randomuser.me/api/?inc=name,registered&nat=US&results=50'
-  return API.get(params);
+  params.url = '/customer'
+  return API.delete(params);
 }
 
 export {
   getList,
+  create,
+  update,
   copy,
   publish,
   archive,

@@ -36,10 +36,10 @@
                     <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
-                    <v-text-field v-model="editedItem.first_name" label="First Name"></v-text-field>
+                    <v-text-field v-model="editedItem.firstName" label="First Name"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
-                    <v-text-field v-model="editedItem.last_name" label="Last Name"></v-text-field>
+                    <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
@@ -141,6 +141,8 @@
 import { mapGetters, mapActions } from 'vuex';
 import {
   GET_LIST_CUSTOMER,
+  CREATE_CUSTOMER,
+  UPDATE_CUSTOMER,
   DELETE_CUSTOMER,
   COPY_CUSTOMER,
   ARCHIVE_CUSTOMER,
@@ -203,11 +205,10 @@ export default {
 
         { text: 'Code', align: 'left', value: 'code' },
         { text: 'Username', align: 'left', value: 'username' },
-        { text: 'First Name', align: 'left', sortable: true, value: 'first_name' },
-        { text: 'Last Name', align: 'left', sortable: true, value: 'last_name' },
+        { text: 'First Name', align: 'left', sortable: true, value: 'firstName' },
+        { text: 'Last Name', align: 'left', sortable: true, value: 'lastName' },
         { text: 'Email', align: 'left', value: 'email' },
         { text: 'Phone', align: 'left', value: 'phone' },
-        { text: 'Date', align: 'left', value: 'modified' },
         { text: 'Actions', align: 'right', value: 'actions', sortable: false }
       ]
     };
@@ -220,13 +221,13 @@ export default {
       const data = this.customerDataSource()
       return data.map((item, key) => {
         return {
-          code: item.cell,
-          username: item.login.username,
-          first_name: item.name.first,
-          last_name: item.name.last,
-          email: item.email,
-          phone: item.phone,
-          modified: this.formatDate(item.registered.date)
+          id: item.Id,
+          code: item.Code,
+          username: item.Username,
+          firstName: item.FirstName,
+          lastName: item.LastName,
+          email: item.Email,
+          phone: item.Phone
         }
       }
       )
@@ -239,7 +240,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
-      this.getList({ url: 'hihi', isShowCriteriaByOther: this.isShowCriteriaByOther, isShowByArchived: this.isShowByArchived });
+      this.getList({ isShowCriteriaByOther: this.isShowCriteriaByOther, isShowByArchived: this.isShowByArchived });
     });
   },
   methods: {
@@ -251,6 +252,8 @@ export default {
     }),
     ...mapActions('customerStore', {
       getList: GET_LIST_CUSTOMER,
+      create: CREATE_CUSTOMER,
+      update: UPDATE_CUSTOMER,
       copy: COPY_CUSTOMER,
       publish: PUBLISH_CUSTOMER,
       archive: ARCHIVE_CUSTOMER,
@@ -282,36 +285,50 @@ export default {
       this.editedIndex = this.dataSource.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want copy item <b>[' + item.first_name + ']?</b>';
+        'Are you sure you want copy item <b>[' + item.firstName + ']?</b>';
       this.confirmDialog = true;
     },
     deleteItem(item) {
       this.selectedEventType = this.eventType.DELETE;
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want delete item <b>[' + item.first_name + ']?</b>';
+        'Are you sure you want delete item <b>[' + item.firstName + ']?</b>';
       this.confirmDialog = true;
     },
     archivedItem(item) {
       this.selectedEventType = this.eventType.ARCHIVED;
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want archive item <b>[' + item.first_name + ']?</b>';
+        'Are you sure you want archive item <b>[' + item.firstName + ']?</b>';
       this.confirmDialog = true;
     },
     publishItem(item) {
       this.selectedEventType = this.eventType.PUBLISH;
       this.editedItem = Object.assign({}, item);
       this.confirmMessage =
-        'Are you sure you want publish item <b>[' + item.first_name + ']?</b>';
+        'Are you sure you want publish item <b>[' + item.firstName + ']?</b>';
       this.confirmDialog = true;
     },
     onChangeShowByArchived(event) {
       this.isShowByArchived = event
-      this.getList({ url: 'hihi', isShowByArchived: event });
+      this.getList({ isShowByArchived: event });
     },
     save() {
-      console.log('save item')
+      console.log(this.editedItem.id)
+      if (this.editedItem.id === '') {
+        this.create({
+          options: this.editedItem
+        });
+      } else {
+        console.log('update')
+        this.update({
+          options: this.editedItem
+        });
+      }
+      this.getList({ isShowByArchived: this.isShowByArchived });
+      this.alertMessage = 'Create successful.';
+      this.alertDialog = true;
+      this.close();
     },
     onSaveChange() {
       this.confirmDialog = false;
@@ -321,6 +338,8 @@ export default {
           this.alertDialog = true;
           break;
         case this.eventType.DELETE:
+          this._delete({ options: this.editedItem.id })
+          this.getList({ isShowByArchived: this.isShowByArchived });
           this.alertMessage = 'Delete successful.';
           this.alertDialog = true;
           break;

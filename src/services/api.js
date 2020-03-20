@@ -1,11 +1,11 @@
 import axios from 'axios';
-
+const baseURL = 'http://localhost:5002/api/v2';
 export const API = {
   get(params) {
     return new Promise((resolve, reject) => {
       const config = params.options ? params.options : {};
       return axios
-        .get(params.url, config)
+        .get(baseURL + params.url, config)
         .then(response => {
           if (response.status === 200) {
             if (params.processData) {
@@ -25,7 +25,7 @@ export const API = {
     return new Promise((resolve, reject) => {
       const config = params.options ? params.options : {};
       return axios
-        .post(params.url, config)
+        .post(baseURL + params.url, config)
         .then(response => {
           if (response.status === 200) {
             if (params.processData) {
@@ -63,9 +63,8 @@ export const API = {
   },
   delete(params) {
     return new Promise((resolve, reject) => {
-      const config = params.options ? params.options : {};
       return axios
-        .delete(params.url, config)
+        .delete(baseURL + params.url + '/' + params.options)
         .then(response => {
           if (response.status === 200) {
             if (params.processData) {

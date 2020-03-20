@@ -30,6 +30,21 @@ export default {
     state.customerModel = {}
   },
 
+  CREATE_CUSTOMER: (state, params) => {
+    state.isLoading = true
+    state.customerParams = params
+    state.customerModel = {}
+  },
+  CREATE_CUSTOMER_SUCCESS: (state, data) => {
+    state.isLoading = false
+    state.customer = Object.freeze(data)
+  },
+  CREATE_CUSTOMER_FAILED: (state, err) => {
+    state.isLoading = false
+    state.responseResult = err
+    state.customerModel = []
+  },
+
   UPDATE_CUSTOMER: (state, params) => {
     state.isLoading = true
     state.customerParams = params
@@ -51,12 +66,12 @@ export default {
   },
   COPY_CUSTOMER_SUCCESS: (state, data) => {
     state.isLoading = false
-    state.customerModel = { ok: 'okkk' }
+    state.customerModel = {}
   },
   COPY_CUSTOMER_FAILED: (state, err) => {
     state.isLoading = false
     state.responseResult = err
-    state.customerModel = { ok: 'faild' }
+    state.customerModel = { }
   },
 
   PUBLISH_CUSTOMER: (state, params) => {

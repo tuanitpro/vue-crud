@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = 'http://localhost:5002/api/v2';
+const baseURL = 'https://developer.tuanitpro.com/api/v2';
 export const API = {
   get(params) {
     return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ export const API = {
     return new Promise((resolve, reject) => {
       const config = params.options ? params.options : {};
       return axios
-        .put(params.url, config)
+        .put(baseURL + params.url, config)
         .then(response => {
           if (response.status === 200) {
             if (params.processData) {

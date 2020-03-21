@@ -12,7 +12,7 @@
       <AlertDialog
         :dialog="alertDialog"
         :message="alertMessage"
-        @close="alertDialog = false"
+        @close="closeOkDialog()"
       />
     </div>
   <el-tabs v-model="activeName">
@@ -42,7 +42,7 @@
                     <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
-                    <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
+                    <v-text-field type="email" v-model="editedItem.email" label="Email"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field v-model="editedItem.phone" label="Phone"></v-text-field>
@@ -62,7 +62,7 @@
         <v-toolbar dense class="toolbar">
             <div class="btn-add">
 
-              <v-icon color="#fff" @click="dialog=true">add</v-icon>
+              <v-icon color="#fff" @click="addNewItem">add</v-icon>
 
           </div>
           <v-toolbar-title>
@@ -111,7 +111,7 @@
             </v-icon>
              <v-icon
                 small
-                @click="archivedItem(item)"
+                @click="publishItem(item)"
             >
                 mdi-publish
             </v-icon>
@@ -183,6 +183,7 @@ export default {
       },
       editedIndex: -1,
       editedItem: {
+        id: '',
         code: '',
         username: '',
         first_name: '',
@@ -191,6 +192,7 @@ export default {
         phone: ''
       },
       defaultItem: {
+        id: '',
         code: '',
         username: '',
         first_name: '',
@@ -202,7 +204,6 @@ export default {
       isShowCriteriaByOther: false,
       isShowByArchived: false,
       headers: [
-
         { text: 'Code', align: 'left', value: 'code' },
         { text: 'Username', align: 'left', value: 'username' },
         { text: 'First Name', align: 'left', sortable: true, value: 'firstName' },
@@ -240,7 +241,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
-      this.getList({ isShowCriteriaByOther: this.isShowCriteriaByOther, isShowByArchived: this.isShowByArchived });
+      this.getList({ isShowByArchived: this.isShowByArchived });
     });
   },
   methods: {
@@ -274,6 +275,19 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       }, 300)
+    },
+    closeOkDialog() {
+      setTimeout(() => {
+        this.getList({ isShowByArchived: this.isShowByArchived });
+        this.alertDialog = false
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      }, 300)
+    },
+    addNewItem() {
+      this.editedItem = Object.assign({}, this.defaultItem)
+      this.editedIndex = -1
+      this.dialog = true
     },
     editItem(item) {
       this.editedIndex = this.dataSource.indexOf(item)
@@ -314,40 +328,40 @@ export default {
       this.getList({ isShowByArchived: event });
     },
     save() {
-      console.log(this.editedItem.id)
       if (this.editedItem.id === '') {
         this.create({
           options: this.editedItem
         });
+        this.alertMessage = 'Create successful.';
       } else {
-        console.log('update')
         this.update({
           options: this.editedItem
         });
+        this.alertMessage = 'Update successful.';
       }
-      this.getList({ isShowByArchived: this.isShowByArchived });
-      this.alertMessage = 'Create successful.';
-      this.alertDialog = true;
       this.close();
+      this.alertDialog = true;
     },
     onSaveChange() {
       this.confirmDialog = false;
       switch (this.selectedEventType) {
         case this.eventType.COPY:
+          this.copy({ options: { id: this.editedItem.id } })
           this.alertMessage = 'Copy successful.';
           this.alertDialog = true;
           break;
         case this.eventType.DELETE:
           this._delete({ options: this.editedItem.id })
-          this.getList({ isShowByArchived: this.isShowByArchived });
           this.alertMessage = 'Delete successful.';
           this.alertDialog = true;
           break;
         case this.eventType.PUBLISH:
-          this.alertMessage = 'New item successful.';
+          this.publish({ options: { id: this.editedItem.id } })
+          this.alertMessage = 'Publish item successful.';
           this.alertDialog = true;
           break;
         case this.eventType.ARCHIVED:
+          this.archive({ options: { id: this.editedItem.id } })
           this.alertMessage = 'Archive successful.';
           this.alertDialog = true;
           break;

@@ -1,7 +1,7 @@
 import { API } from './api';
 
 function getList(params) {
-  params.url = '/customer'
+  params.url = '/customer/archived/' + params.isShowByArchived
   return API.get(params);
 }
 function create(params) {
@@ -13,15 +13,15 @@ function update(params) {
   return API.put(params);
 }
 function copy(params) {
-  params.url = '/customer'
-  return API.put(params);
+  params.url = '/customer/copy'
+  return API.post(params);
 }
 function publish(params) {
-  params.url = '/customer'
+  params.url = '/customer/publish'
   return API.put(params);
 }
 function archive(params) {
-  params.url = '/customer'
+  params.url = '/customer/archive'
   return API.put(params);
 }
 function _delete(params) {

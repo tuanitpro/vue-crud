@@ -1,0 +1,51 @@
+.main-table {
+    a{
+        text-decoration: none;
+    }
+    h1 {
+      float: left;
+      color: 'red';
+    }
+    width: 100%;
+    .header {
+      float: left;     
+    }
+    .body {
+      float: left;
+      width: 100%;     
+      .col-action {
+        text-align: center;
+        width: 120px;
+      }
+    }
+    .footer {
+      float: left;
+      margin-left: 100px;
+      width: 100%;
+      text-align: left;
+    }
+  }
+  
+  .checkbox {
+    padding-left: 30px;
+  }
+  .checkbox-input {
+    margin-right: 8px;
+  }
+  .btn-add {
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: #1976d2;
+  }
+  .v-toolbar__content {
+    padding: 0 10px !important;
+  }
+  .v-toolbar__title {
+    width: 30%;
+  }
+  .search-form {
+    margin-bottom: 2px;
+    margin-left: 5px;
+  }
+  

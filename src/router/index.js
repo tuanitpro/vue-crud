@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ProductPage from '@/components/ProductPage';
 Vue.use(Router);
 
 export default new Router({
@@ -13,9 +12,14 @@ export default new Router({
       component: () => import('@/components/pages/customer')
     },
     {
-      path: '/product/:id',
-      name: 'ProductPage',
-      component: ProductPage
+      path: '/paging',
+      name: 'paging',
+      component: () => import('@/components/pages/paging')
+    },
+    {
+      path: '/grapql',
+      name: 'grapql',
+      component: () => import('@/components/pages/graphqlapi')
     }
   ]
 })

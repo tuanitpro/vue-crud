@@ -256,7 +256,6 @@ export default {
       _delete: DELETE_CUSTOMER
     }),
     handleClick(tab, event) {
-      console.log(tab, event);
     },
     formatDate(val) {
       var date = new Date(val)

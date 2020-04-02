@@ -2,6 +2,9 @@ import {
   GET_LIST_CUSTOMER,
   GET_LIST_CUSTOMER_SUCCESS,
   GET_LIST_CUSTOMER_FAILED,
+  GET_LIST_CUSTOMER_PAGING,
+  GET_LIST_CUSTOMER_PAGING_SUCCESS,
+  GET_LIST_CUSTOMER_PAGING_FAILED,
   CREATE_CUSTOMER,
   CREATE_CUSTOMER_SUCCESS,
   CREATE_CUSTOMER_FAILED,
@@ -23,6 +26,7 @@ import {
 } from './actionTypes';
 import {
   getList,
+  getListPaging,
   create,
   copy,
   publish,
@@ -38,6 +42,15 @@ export const actions = {
       context.commit(GET_LIST_CUSTOMER_SUCCESS, response);
     }).catch(err => {
       context.commit(GET_LIST_CUSTOMER_FAILED, err);
+    })
+  },
+
+  GET_LIST_CUSTOMER_PAGING: (context, payload) => {
+    context.commit(GET_LIST_CUSTOMER_PAGING, payload);
+    getListPaging(payload).then(response => {
+      context.commit(GET_LIST_CUSTOMER_PAGING_SUCCESS, response);
+    }).catch(err => {
+      context.commit(GET_LIST_CUSTOMER_PAGING_FAILED, err);
     })
   },
 

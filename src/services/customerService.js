@@ -4,6 +4,18 @@ function getList(params) {
   params.url = '/customer/archived/' + params.isShowByArchived
   return API.get(params);
 }
+
+function getListPaging(params) {
+  const obj = {
+    url: '/customer/searchs/',
+    options: {
+      params: params
+    }
+  }
+
+  return API.get(obj);
+}
+
 function create(params) {
   params.url = '/customer'
   return API.post(params);
@@ -31,6 +43,7 @@ function _delete(params) {
 
 export {
   getList,
+  getListPaging,
   create,
   update,
   copy,

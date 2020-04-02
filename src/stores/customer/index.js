@@ -9,6 +9,7 @@ const customerState = {
   customerParams: {},
   customerModel: {},
   customerDataSource: [],
+  customerDataSourcePaging: {},
   responseResult: {}
 }
 

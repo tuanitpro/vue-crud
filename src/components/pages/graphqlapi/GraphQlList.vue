@@ -144,7 +144,7 @@ import {
 const ConfirmDialog = () => import('../../elements/ele-ConfirmDialog');
 const AlertDialog = () => import('../../elements/ele-AlertDialog');
 export default {
-  name: 'PagingServer',
+  name: 'GraphQlList',
   components: {
     ConfirmDialog,
     AlertDialog
@@ -256,7 +256,6 @@ export default {
       _delete: DELETE_CUSTOMER
     }),
     handleClick(tab, event) {
-      console.log(tab, event);
     },
     formatDate(val) {
       var date = new Date(val)

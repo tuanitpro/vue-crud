@@ -85,6 +85,9 @@
           :loading="isLoading()"
           :search="search"
           class="elevation-1"
+          :options.sync="pagination"
+          :server-items-length="totalItems"
+          :items-per-page-options="rowsPerPageItems"
         >
         <template v-slot:item.actions="{ item }">
             <v-icon
@@ -133,18 +136,18 @@
 
 import { mapGetters, mapActions } from 'vuex';
 import {
-  GET_LIST_CUSTOMER,
   CREATE_CUSTOMER,
   UPDATE_CUSTOMER,
   DELETE_CUSTOMER,
   COPY_CUSTOMER,
   ARCHIVE_CUSTOMER,
-  PUBLISH_CUSTOMER
+  PUBLISH_CUSTOMER,
+  GET_LIST_CUSTOMER_PAGING
 } from '../../../stores/customer/actions/actionTypes';
 const ConfirmDialog = () => import('../../elements/ele-ConfirmDialog');
 const AlertDialog = () => import('../../elements/ele-AlertDialog');
 export default {
-  name: 'GraphQlList',
+  name: 'PagingServer',
   components: {
     ConfirmDialog,
     AlertDialog
@@ -158,10 +161,13 @@ export default {
       confirmMessage: '',
       search: '',
       pagination: {
-        rowsPerPage: 10,
-        sortBy: 'code',
-        descending: false
+        itemsPerPage: 10,
+        sortBy: ['code'],
+        sortDesc: [false],
+        mustSort: true,
+        multiSort: false
       },
+      rowsPerPageItems: [25, 50, 100, { text: '$vuetify.dataIterator.rowsPerPageAll', value: -1 }],
       editId: '',
       activeName: 'first',
       productData: {
@@ -214,40 +220,65 @@ export default {
       return this.editedIndex === -1 ? 'New Customer' : 'Edit Customer'
     },
     dataSource() {
-      const data = this.customerDataSource()
-      return data.map((item, key) => {
-        return {
-          id: item.Id,
-          code: item.Code,
-          username: item.Username,
-          firstName: item.FirstName,
-          lastName: item.LastName,
-          email: item.Email,
-          phone: item.Phone
+      const data = this.customerDataSourcePaging()
+      if (data.data && data.data.results) {
+        return data.data.results.map((item, key) => {
+          return {
+            id: item.Id,
+            code: item.Code,
+            username: item.Username,
+            firstName: item.FirstName,
+            lastName: item.LastName,
+            email: item.Email,
+            phone: item.Phone
+          }
         }
+        )
+      } else {
+        return []
       }
-      )
+    },
+    totalItems() {
+      const data = this.customerDataSourcePaging()
+      if (data.data && data.data.total_items) {
+        return data.data.total_items
+      } else {
+        return 0
+      }
     }
   },
   watch: {
     confirmDialog(val) {
       this.confirmDialog = val;
+    },
+    pagination: {
+      handler(params) {
+        this.fetchDataFromServer()
+      },
+      deep: true
+    },
+    search: {
+      handler(params) {
+        this.search = params
+        this.fetchDataFromServer()
+      },
+      deep: true
     }
   },
   mounted() {
     this.$nextTick(function() {
-      this.getList({ isShowByArchived: this.isShowByArchived });
+      this.fetchDataFromServer();
     });
   },
   methods: {
     ...mapGetters('customerStore', {
       isLoading: 'isLoading',
-      customerDataSource: 'customerDataSource',
+      customerDataSourcePaging: 'customerDataSourcePaging',
       customerModel: 'customerModel',
       responseResult: 'responseResult'
     }),
     ...mapActions('customerStore', {
-      getList: GET_LIST_CUSTOMER,
+      getList: GET_LIST_CUSTOMER_PAGING,
       create: CREATE_CUSTOMER,
       update: UPDATE_CUSTOMER,
       copy: COPY_CUSTOMER,
@@ -256,7 +287,15 @@ export default {
       _delete: DELETE_CUSTOMER
     }),
     handleClick(tab, event) {
-      console.log(tab, event);
+    },
+    fetchDataFromServer() {
+      this.getList({
+        q: this.search,
+        sortBy: this.pagination.sortBy[0],
+        sortDesc: this.pagination.sortDesc[0],
+        page: this.pagination.page,
+        limit: this.pagination.itemsPerPage
+      });
     },
     formatDate(val) {
       var date = new Date(val)
@@ -323,7 +362,7 @@ export default {
     },
     onChangeShowByArchived(event) {
       this.isShowByArchived = event
-      this.getList({ isShowByArchived: event });
+      this.fetchDataFromServer()
     },
     save() {
       if (this.editedItem.id === '') {

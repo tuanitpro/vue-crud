@@ -1,6 +1,7 @@
 import axios from 'axios';
-const baseURL = 'https://developer.tuanitpro.com/api/v2';
+const baseURL = process.env.NODE_ENV !== 'production' ? 'http://localhost:5002/api/v2' : 'https://developer.tuanitpro.com/api/v2';
 export const API = {
+
   get(params) {
     return new Promise((resolve, reject) => {
       const config = params.options ? params.options : {};

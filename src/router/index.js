@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'CustomerList',
+      name: 'customer',
       component: () => import('@/components/pages/customer')
     },
     {
@@ -17,8 +17,8 @@ export default new Router({
       component: () => import('@/components/pages/paging')
     },
     {
-      path: '/grapql',
-      name: 'grapql',
+      path: '/graphql',
+      name: 'graphql',
       component: () => import('@/components/pages/graphqlapi')
     }
   ]

@@ -15,6 +15,21 @@ export default {
     state.customerDataSource = []
   },
 
+  GET_LIST_CUSTOMER_PAGING: (state, params) => {
+    state.isLoading = true
+    state.customerParams = params
+    state.customerDataSourcePaging = {}
+  },
+  GET_LIST_CUSTOMER_PAGING_SUCCESS: (state, data) => {
+    state.isLoading = false
+    state.customerDataSourcePaging = Object.freeze(data)
+  },
+  GET_LIST_CUSTOMER_PAGING_FAILED: (state, err) => {
+    state.isLoading = false
+    state.responseResult = err
+    state.customerDataSource = {}
+  },
+
   GET_CUSTOMER: (state, params) => {
     state.isLoading = true
     state.customerParams = params

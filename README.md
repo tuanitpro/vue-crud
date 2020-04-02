@@ -23,6 +23,9 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+### Demo
+See [https://vue.tuanitpro.com/](https://vue.tuanitpro.com/)
+
 ### Screenshot
 ![Capture](https://raw.githubusercontent.com/tuanitpro/vue-crud/master/screenshot/Capture.PNG)
 ![Capture](https://raw.githubusercontent.com/tuanitpro/vue-crud/master/screenshot/Capture1.PNG)

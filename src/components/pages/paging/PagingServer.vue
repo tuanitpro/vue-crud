@@ -240,8 +240,8 @@ export default {
     },
     totalItems() {
       const data = this.customerDataSourcePaging()
-      if (data.data && data.data.total_items) {
-        return data.data.total_items
+      if (data.data && data.data.totalItems) {
+        return data.data.totalItems
       } else {
         return 0
       }

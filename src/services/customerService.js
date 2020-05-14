@@ -1,7 +1,7 @@
 import { API } from './api';
 
 function getList(params) {
-  params.url = '/customer/archived/' + params.isShowByArchived
+  params.url = '/customer'
   return API.get(params);
 }
 
